@@ -163,7 +163,7 @@ try {
       saveData(json);
       reset();
       message.channel.send('Setup saved!');
-    } else if (command === 'createDB') {
+    } else if (command === 'init') {
       createDB();
       message.channel.send('DB created');
     } else if (command === 'check') {
@@ -307,9 +307,7 @@ try {
   }
 
   function createDB(){
-    var query =`
-    SELECT *
-    FROM pg_catalog.pg_tables;`;
+    var query ="SELECT * FROM pg_catalog.pg_tables;";
 
         console.log("test query");
         dbClient.query(query, (err, res) => {
