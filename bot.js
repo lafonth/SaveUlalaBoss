@@ -17,8 +17,7 @@ try {
   var patternSetup = {
     name: "",
     zone: {
-      name: "",
-      num: ""
+      name: ""
     },
     playerList: [{
         type: "",
@@ -159,12 +158,11 @@ try {
       message.channel.send("Current setup: " + JSON.stringify(json[nextPosition]));
     } else if (command === 'add') {
       addIsRuning = true;
-      message.channel.send('Next Command : !b nameBoss nameZone numZone');
+      message.channel.send('Next Command : !b nameBoss nameZone');
     } else if (addIsRuning == true) {
       if (command === 'b') {
         json[nextPosition].name = args[0];
         json[nextPosition].zone.name = args[1];
-        json[nextPosition].zone.num = args[2];
         message.channel.send('Next Command : !p numPlayer className petName skill1 skill2 skill3 skill4 toy1 toy2 toy3 toy4');
       } else if (command === 'p') {
         numPlayer = parseInt(args[0]) - 1;
