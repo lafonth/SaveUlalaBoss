@@ -3,10 +3,10 @@ const {
   Client,
   Intents
 } = require('discord.js');
-const {
-  token,
-  prefix
-} = require('./config.json');
+// const {
+//   token,
+//   prefix
+// } = require('./config.json');
 
 let json = require('./data/storage.json');
 
@@ -136,16 +136,16 @@ try {
     intents: myIntents
   });
 
-  client.login(token);
+  client.login(process.env.token);
 
   client.once('ready', () => {
     console.log('Ready!');
   });
 
   client.on('messageCreate', message => {
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (!message.content.startsWith(process.env.prefix) || message.author.bot) return;
 
-    const args = message.content.slice(prefix.length).split(/ +/);
+    const args = message.content.slice(process.env.prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
     if (command === 'clear') {
