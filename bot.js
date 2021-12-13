@@ -343,10 +343,10 @@ try {
     FROM pg_catalog.pg_tables
     WHERE schemaname != 'pg_catalog' AND 
         schemaname != 'information_schema';`;
-
+        console.log("test query");
         dbClient.query(query, (err, res) => {
           if (err) throw err;
-          console.log(res);
+          
         });
   }
 
