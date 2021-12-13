@@ -289,9 +289,8 @@ try {
   }
 
   function saveData(setup) {
-    var skills;
     setup.playerList.forEach(player => {
-      skills = await insertMultipleSkillsDB(
+      insertMultipleSkillsDB(
         player.skillList[0].skillName,
         player.skillList[0].toyName,
         player.skillList[1].skillName,
@@ -299,12 +298,14 @@ try {
         player.skillList[2].skillName,
         player.skillList[2].toyName,
         player.skillList[3].skillName,
-        player.skillList[3].toyName);
+        player.skillList[3].toyName).then((skills) => {
+        console.log("Keys Skills: " + skills);
+      });
     });
-    console.log("Keys Skills: " + skills);
+
   }
 
-  const insertMultipleSkillsDB = async (skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) => {
+  function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
     dbClient.query('INSERT INTO Skill VALUES (1,' + skillName1 + ',' + toyName1 + '),(2,' + skillName2 + ',' + toyName2 + '),(3,' + skillName3 + ',' + toyName3 + '),(4,' + skillName4 + ',' + toyName4 + ')', (err, res) => {
       if (err) throw err;
       return keys = Object.keys(res);
