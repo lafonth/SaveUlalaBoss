@@ -17,8 +17,8 @@ const dbClient = new DBClient({
 
 dbClient.connect();
 const config = (process.argv[2] == "dev") ? require('./config.json') : "";
-const token =  (process.argv[2] == "dev") ? config.token : process.env.token;
-const prefix =  (process.argv[2] == "dev") ? config.prefix : process.env.prefix;
+const token = (process.argv[2] == "dev") ? config.token : process.env.token;
+const prefix = (process.argv[2] == "dev") ? config.prefix : process.env.prefix;
 
 let json = require('./data/storage.json');
 
@@ -164,8 +164,8 @@ try {
       reset();
       message.channel.send('Setup saved!');
     } else if (command === 'init') {
-      createDB();
-      message.channel.send('DB created');
+      // createDB();
+      // message.channel.send('DB created');
     } else if (command === 'check') {
       displayCurrentSetup(message, json[nextPosition]);
     } else if (command === 'add') {
@@ -292,22 +292,36 @@ try {
   function saveData(setup) {
     setup.playerList.forEach(player => {
       insertMultipleSkillsDB(
-        player.skillList[0].skillName,
-        player.skillList[0].toyName,
-        player.skillList[1].skillName,
-        player.skillList[1].toyName,
-        player.skillList[2].skillName,
-        player.skillList[2].toyName,
-        player.skillList[3].skillName,
-        player.skillList[3].toyName).then((skills) => {
-        console.log("Keys Skills: " + skills);
-      });
+          player.skillList[0].skillName,
+          player.skillList[0].toyName,
+          player.skillList[1].skillName,
+          player.skillList[1].toyName,
+          player.skillList[2].skillName,
+          player.skillList[2].toyName,
+          player.skillList[3].skillName,
+          player.skillList[3].toyName
+        )
+        .then(
+          (skills) => {
+            insertPlayer(player, skills);
+          }
+        );
     });
+  }
+
+  function insertPlayer(player, skills){
 
   }
 
-  function createDB(){
-    var query =`set transaction read write; 
+  function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
+    dbClient.query('INSERT INTO Skill VALUES (1,' + skillName1 + ',' + toyName1 + '),(2,' + skillName2 + ',' + toyName2 + '),(3,' + skillName3 + ',' + toyName3 + '),(4,' + skillName4 + ',' + toyName4 + ')', (err, res) => {
+      if (err) throw err;
+      return keys = Object.keys(res);
+    });
+  }
+
+  function createDB() {
+    var query = `set transaction read write; 
     DROP SCHEMA public CASCADE;
     CREATE SCHEMA public;
     
@@ -344,19 +358,12 @@ try {
     WHERE schemaname != 'pg_catalog' AND 
         schemaname != 'information_schema';`;
 
-        console.log("test query");
-        dbClient.query(query, (err, res) => {
-          if (err) throw err;
-          
-        });
-  }
-
-  function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
-    dbClient.query('INSERT INTO Skill VALUES (1,' + skillName1 + ',' + toyName1 + '),(2,' + skillName2 + ',' + toyName2 + '),(3,' + skillName3 + ',' + toyName3 + '),(4,' + skillName4 + ',' + toyName4 + ')', (err, res) => {
+    dbClient.query(query, (err, res) => {
       if (err) throw err;
-      return keys = Object.keys(res);
     });
   }
+
+
 
 } catch (error) {
   saveData(json);
