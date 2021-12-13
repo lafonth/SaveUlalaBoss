@@ -16,7 +16,7 @@ const dbClient = new DBClient({
 });
 
 dbClient.connect();
-const config = require('./config.json');
+const config = (process.argv[2] == "dev") ? require('./config.json') : "";
 const token =  (process.argv[2] == "dev") ? config.token : process.env.token;
 const prefix =  (process.argv[2] == "dev") ? config.prefix : process.env.prefix;
 
