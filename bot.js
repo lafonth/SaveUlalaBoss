@@ -36,22 +36,22 @@ try {
         skillList: [{
             numOrder: 1,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 2,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 3,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 4,
             skillName: "",
-            toy: ""
+            toyName: ""
           }
         ],
         pet: ""
@@ -61,22 +61,22 @@ try {
         skillList: [{
             numOrder: 1,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 2,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 3,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 4,
             skillName: "",
-            toy: ""
+            toyName: ""
           }
         ],
         pet: ""
@@ -86,22 +86,22 @@ try {
         skillList: [{
             numOrder: 1,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 2,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 3,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 4,
             skillName: "",
-            toy: ""
+            toyName: ""
           }
         ],
         pet: ""
@@ -111,22 +111,22 @@ try {
         skillList: [{
             numOrder: 1,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 2,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 3,
             skillName: "",
-            toy: ""
+            toyName: ""
           },
           {
             numOrder: 4,
             skillName: "",
-            toy: ""
+            toyName: ""
           }
         ],
         pet: ""
@@ -183,7 +183,7 @@ try {
           json[nextPosition].playerList[numPlayer].skillList[index].name = args[index + 3];
         }
         for (let index = 0; index < 4; index++) {
-          json[nextPosition].playerList[numPlayer].skillList[index].toy = args[index + 7];
+          json[nextPosition].playerList[numPlayer].skillList[index].toyName = args[index + 7];
         }
         if (isPlayerListFilledUp(json[nextPosition].playerList)) {
           message.channel.send('Your setup is finshed!');
@@ -229,11 +229,11 @@ try {
     message.channel.send(responseText);
   }
 
-  function displaySetup(message, nameBoss, nameZone) {
+  function displaySetup(message, bossName, zoneName) {
     var responseText = "";
     message.channel.send('Display Setup:');
-    var setupFound = json.find(element => (element.name == nameBoss && element.zone.name == nameZone && element.zone.num == numZone));
-    responseText += setupFound.name + " " + setupFound.zone.name + " " + setupFound.zone.num + " \n";
+    var setupFound = json.find(element => (element.bossName == bossName && element.zoneName == zoneName));
+    responseText += setupFound.name + " " + setupFound.zone.name + " \n";
     setupFound.playerList.forEach(player => {
       responseText += "**Player " + player.class + ": **";
       player.skillList.forEach((skill, index) => {
@@ -253,7 +253,7 @@ try {
   function displayCurrentSetup(message, setup) {
     var responseText = "";
     message.channel.send('Display Current Setup:');
-    responseText += setup.name + " " + setup.zone.name + " " + setup.zone.num + " \n";
+    responseText += setup.bossName + " " + setup.zoneName + " \n";
     setup.playerList.forEach(player => {
       responseText += "**Player " + player.class + ": **";
       player.skillList.forEach((skill, index) => {
@@ -289,29 +289,25 @@ try {
   }
 
   function saveData(setup) {
-    // convert JSON object to string
-    const data = JSON.stringify(setup);
-
-    //parse data to DB
-    //Skills
-    //Players
-
-    //Setup
-
-    // write JSON string to a file
-    // fs.writeFile('data/storage.json', data, (err) => {
-    //   if (err) {
-    //     throw err;
-    //   }
-    //   console.log("JSON data is saved.");
-    // });
+    var skills;
+    setup.playerList.forEach(player => {
+      skills = await insertMultipleSkillsDB(
+        player.skillList[0].skillName,
+        player.skillList[0].toyName,
+        player.skillList[1].skillName,
+        player.skillList[1].toyName,
+        player.skillList[2].skillName,
+        player.skillList[2].toyName,
+        player.skillList[3].skillName,
+        player.skillList[3].toyName);
+    });
+    console.log("Keys Skills: " + skills);
   }
 
-  function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
+  const insertMultipleSkillsDB = async (skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) => {
     dbClient.query('INSERT INTO Skill VALUES (1,' + skillName1 + ',' + toyName1 + '),(2,' + skillName2 + ',' + toyName2 + '),(3,' + skillName3 + ',' + toyName3 + '),(4,' + skillName4 + ',' + toyName4 + ')', (err, res) => {
       if (err) throw err;
-      var keys = Object.keys(res);
-      dbClient.end();
+      return keys = Object.keys(res);
     });
   }
 
@@ -319,4 +315,3 @@ try {
   saveData(json);
   console.log(error);
 }
-
