@@ -139,7 +139,7 @@ try {
   client.login(process.env.token);
 
   client.once('ready', () => {
-    console.log('Ready!');
+    console.log('Ready to listen!');
   });
 
   client.on('messageCreate', message => {
