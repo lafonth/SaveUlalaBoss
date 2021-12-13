@@ -238,9 +238,9 @@ try {
       responseText += "**Player " + player.class + ": **";
       player.skillList.forEach((skill, index) => {
         if (index !== 3) {
-          responseText += skill.name + " | ";
+          responseText += skillName + " | ";
         } else {
-          responseText += skill.name;
+          responseText += skillName;
         }
       });
       responseText += "\n";
@@ -258,9 +258,9 @@ try {
       responseText += "**Player " + player.class + ": **";
       player.skillList.forEach((skill, index) => {
         if (index !== 3) {
-          responseText += skill.name + " | ";
+          responseText += skillName + " | ";
         } else {
-          responseText += skill.name;
+          responseText += skillName;
         }
       });
       responseText += "\n";
@@ -272,7 +272,7 @@ try {
 
   function isSkillListFilledUp(skillList) {
     return skillList.every((skill) => {
-      return (skill.name !== "");
+      return (skillName !== "");
     });
   }
 
