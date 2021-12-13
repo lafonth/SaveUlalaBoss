@@ -3,6 +3,18 @@ const {
   Client,
   Intents
 } = require('discord.js');
+
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+client.connect();
+
 // const {
 //   token,
 //   prefix
@@ -15,105 +27,103 @@ try {
   var nextPosition = json.length;
 
   var patternSetup = {
-    name: "",
-    zone: {
-      name: ""
-    },
+    bossName: "",
+    zoneName: "",
     playerList: [{
-        type: "",
+        class: "",
         skillList: [{
-            order: 1,
-            name: "",
+            numOrder: 1,
+            skillName: "",
             toy: ""
           },
           {
-            order: 2,
-            name: "",
+            numOrder: 2,
+            skillName: "",
             toy: ""
           },
           {
-            order: 3,
-            name: "",
+            numOrder: 3,
+            skillName: "",
             toy: ""
           },
           {
-            order: 4,
-            name: "",
+            numOrder: 4,
+            skillName: "",
             toy: ""
           }
         ],
         pet: ""
       },
       {
-        type: "",
+        class: "",
         skillList: [{
-            order: 1,
-            name: "",
+            numOrder: 1,
+            skillName: "",
             toy: ""
           },
           {
-            order: 2,
-            name: "",
+            numOrder: 2,
+            skillName: "",
             toy: ""
           },
           {
-            order: 3,
-            name: "",
+            numOrder: 3,
+            skillName: "",
             toy: ""
           },
           {
-            order: 4,
-            name: "",
+            numOrder: 4,
+            skillName: "",
             toy: ""
           }
         ],
         pet: ""
       },
       {
-        type: "",
+        class: "",
         skillList: [{
-            order: 1,
-            name: "",
+            numOrder: 1,
+            skillName: "",
             toy: ""
           },
           {
-            order: 2,
-            name: "",
+            numOrder: 2,
+            skillName: "",
             toy: ""
           },
           {
-            order: 3,
-            name: "",
+            numOrder: 3,
+            skillName: "",
             toy: ""
           },
           {
-            order: 4,
-            name: "",
+            numOrder: 4,
+            skillName: "",
             toy: ""
           }
         ],
         pet: ""
       },
       {
-        type: "",
+        class: "",
         skillList: [{
-            order: 1,
-            name: "",
+            numOrder: 1,
+            skillName: "",
             toy: ""
           },
           {
-            order: 2,
-            name: "",
+            numOrder: 2,
+            skillName: "",
             toy: ""
           },
           {
-            order: 3,
-            name: "",
+            numOrder: 3,
+            skillName: "",
             toy: ""
           },
           {
-            order: 4,
-            name: "",
+            numOrder: 4,
+            skillName: "",
             toy: ""
           }
         ],
@@ -124,7 +134,6 @@ try {
 
   json[nextPosition] = patternSetup;
   var numPlayer = 0;
-  var orderSkill = 0;
   var addIsRuning = 0;
 
   const myIntents = new Intents();
@@ -155,18 +164,18 @@ try {
       reset();
       message.channel.send('Setup saved!');
     } else if (command === 'check') {
-      message.channel.send("Current setup: " + JSON.stringify(json[nextPosition]));
+      displayCurrentSetup(message,json[nextPosition]);
     } else if (command === 'add') {
       addIsRuning = true;
       message.channel.send('Next Command : !b nameBoss nameZone');
     } else if (addIsRuning == true) {
       if (command === 'b') {
-        json[nextPosition].name = args[0];
-        json[nextPosition].zone.name = args[1];
+        json[nextPosition].boss = args[0];
+        json[nextPosition].zone = args[1];
         message.channel.send('Next Command : !p numPlayer className petName skill1 skill2 skill3 skill4 toy1 toy2 toy3 toy4');
       } else if (command === 'p') {
         numPlayer = parseInt(args[0]) - 1;
-        json[nextPosition].playerList[numPlayer].type = args[1];
+        json[nextPosition].playerList[numPlayer].class = args[1];
         json[nextPosition].playerList[numPlayer].pet = args[2];
         for (let index = 0; index < 4; index++) {
           json[nextPosition].playerList[numPlayer].skillList[index].name = args[index + 3];
@@ -174,15 +183,11 @@ try {
         for (let index = 0; index < 4; index++) {
           json[nextPosition].playerList[numPlayer].skillList[index].toy = args[index + 7];
         }
-        if (isSkillListFilledUp(json[nextPosition].playerList[numPlayer].skillList)) {
-          if (isPlayerListFilledUp(json[nextPosition].playerList)) {
-            message.channel.send('Your setup is finshed!');
-            saveData(json);
-          } else {
-            message.channel.send('Next Command : !p numPlayer className petName skill1 skill2 skill3 skill4 toy1 toy2 toy3 toy4');
-          }
+        if (isPlayerListFilledUp(json[nextPosition].playerList)) {
+          message.channel.send('Your setup is finshed!');
+          saveData(json);
         } else {
-          message.channel.send('Next Command : !skill orderSkill nameSkill nameToy');
+          message.channel.send('Next Command : !p numPlayer className petName skill1 skill2 skill3 skill4 toy1 toy2 toy3 toy4');
         }
       }
     } else if (command === 'get') {
@@ -228,7 +233,27 @@ try {
     var setupFound = json.find(element => (element.name == nameBoss && element.zone.name == nameZone && element.zone.num == numZone));
     responseText += setupFound.name + " " + setupFound.zone.name + " " + setupFound.zone.num + " \n";
     setupFound.playerList.forEach(player => {
-      responseText += "**Player "+ player.type + ": **";
+      responseText += "**Player "+ player.class + ": **";
+      player.skillList.forEach((skill,index) => {
+        if(index !== 3){
+          responseText += skill.name + " | ";
+        }else{
+          responseText += skill.name;
+        }
+      });
+      responseText += "\n";
+      responseText += "Pet: " + player.pet;
+      responseText += "\n";
+    }); 
+    message.channel.send(responseText);
+  }
+
+  function displayCurrentSetup(message, setup) {
+    var responseText = "";
+    message.channel.send('Display Current Setup:');
+    responseText += setup.name + " " + setup.zone.name + " " + setup.zone.num + " \n";
+    setup.playerList.forEach(player => {
+      responseText += "**Player "+ player.class + ": **";
       player.skillList.forEach((skill,index) => {
         if(index !== 3){
           responseText += skill.name + " | ";
@@ -258,7 +283,6 @@ try {
   function reset() {
     json[nextPosition] = patternSetup;
     numPlayer = 0;
-    orderSkill = 0;
     addIsRuning = false;
   }
 
