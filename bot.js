@@ -307,42 +307,10 @@ try {
   }
 
   function createDB(){
-    var query =`set transaction read write; 
-    DROP SCHEMA public CASCADE;
-    CREATE SCHEMA public;
-    
-    
-    CREATE TABLE IF NOT EXISTS Skill (
-      skillId serial PRIMARY KEY,
-      numOrder INTEGER NOT NULL,
-      skillName VARCHAR ( 50 ) NOT NULL,
-      toyName VARCHAR ( 50 ) NOT NULL
-    );
-    
-    CREATE TABLE IF NOT EXISTS Player (
-      playerId serial PRIMARY KEY,
-      class VARCHAR ( 50 ) NOT NULL,
-      pet VARCHAR ( 50 ) NOT NULL,
-      skillOne INTEGER REFERENCES skill (skillId),
-      skillTwo INTEGER REFERENCES skill (skillId),
-      skillThree INTEGER REFERENCES skill (skillId),
-      skillFour INTEGER REFERENCES skill (skillId)
-    );
-    
-    CREATE TABLE IF NOT EXISTS Setup (
-      setupId serial PRIMARY KEY,
-      bossName VARCHAR ( 50 ) NOT NULL,
-      zoneName VARCHAR ( 50 ) NOT NULL,
-      playerOne INTEGER REFERENCES player (playerId),
-      playerTwo INTEGER REFERENCES player (playerId),
-      playerThree INTEGER REFERENCES player (playerId),
-      playerFour INTEGER REFERENCES player (playerId)
-    ); 
-    
+    var query =`
     SELECT *
-    FROM pg_catalog.pg_tables
-    WHERE schemaname != 'pg_catalog' AND 
-        schemaname != 'information_schema';`;
+    FROM pg_catalog.pg_tables;`;
+
         console.log("test query");
         dbClient.query(query, (err, res) => {
           if (err) throw err;
