@@ -17,8 +17,8 @@ const dbClient = new DBClient({
 
 dbClient.connect();
 const config = (process.argv[2] == "dev") ? require('./config.json') : "";
-const token =  (process.argv[2] == "dev") ? config.token : process.env.token;
-const prefix =  (process.argv[2] == "dev") ? config.prefix : process.env.prefix;
+const token = (process.argv[2] == "dev") ? config.token : process.env.token;
+const prefix = (process.argv[2] == "dev") ? config.prefix : process.env.prefix;
 
 let json = require('./data/storage.json');
 
@@ -306,14 +306,14 @@ try {
 
   }
 
-  function createDB(){
-    var query ="SELECT * FROM pg_catalog.pg_tables;";
+  function createDB() {
+    var query = "SELECT * FROM pg_catalog.pg_tables;";
 
-        console.log("test query");
-        dbClient.query(query, (err, res) => {
-          if (err) throw err;
-          
-        });
+    dbClient.query(query, (err, res) => {
+      if (err) throw err;
+      console.log("test query:" + res);
+
+    });
   }
 
   function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
