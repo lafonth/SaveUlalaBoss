@@ -5,17 +5,17 @@ const {
 } = require('discord.js');
 
 const {
-  Client
+  DBClient
 } = require('pg');
 
-const client = new Client({
+const dbClient = new DBClient({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
 });
 
-client.connect();
+dbClient.connect();
 
 // const {
 //   token,
@@ -294,13 +294,6 @@ try {
 
     //parse data to DB
     //Skills
-    client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
-      if (err) throw err;
-      for (let row of res.rows) {
-        console.log(JSON.stringify(row));
-      }
-      client.end();
-    });
     //Players
 
     //Setup
@@ -315,10 +308,10 @@ try {
   }
 
   function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
-    client.query('INSERT INTO Skill VALUES (1,' + skillName1 + ',' + toyName1 + '),(2,' + skillName2 + ',' + toyName2 + '),(3,' + skillName3 + ',' + toyName3 + '),(4,' + skillName4 + ',' + toyName4 + ')', (err, res) => {
+    dbClient.query('INSERT INTO Skill VALUES (1,' + skillName1 + ',' + toyName1 + '),(2,' + skillName2 + ',' + toyName2 + '),(3,' + skillName3 + ',' + toyName3 + '),(4,' + skillName4 + ',' + toyName4 + ')', (err, res) => {
       if (err) throw err;
       var keys = Object.keys(res);
-      client.end();
+      dbClient.end();
     });
   }
 
