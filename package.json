@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "main": "bot.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "start": "npm install"
   },
