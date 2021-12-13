@@ -239,9 +239,9 @@ try {
       responseText += "**Player " + player.class + ": **";
       player.skillList.forEach((skill, index) => {
         if (index !== 3) {
-          responseText += skillName + " | ";
+          responseText += skill.skillName + " | ";
         } else {
-          responseText += skillName;
+          responseText += skill.skillName;
         }
       });
       responseText += "\n";
@@ -259,9 +259,9 @@ try {
       responseText += "**Player " + player.class + ": **";
       player.skillList.forEach((skill, index) => {
         if (index !== 3) {
-          responseText += skillName + " | ";
+          responseText += skill.skillName + " | ";
         } else {
-          responseText += skillName;
+          responseText += skill.skillName;
         }
       });
       responseText += "\n";
