@@ -17,10 +17,11 @@ const dbClient = new DBClient({
 
 dbClient.connect();
 
-// const {
-//   token,
-//   prefix
-// } = require('./config.json');
+const token = process.argv[2] == "dev" ? require('./config.json') : process.env.token;
+const prefix = process.argv[2] == "dev" ? require('./config.json') : process.env.prefix;
+
+
+
 
 let json = require('./data/storage.json');
 
@@ -146,16 +147,16 @@ try {
     intents: myIntents
   });
 
-  client.login(process.env.token);
+  client.login(token);
 
   client.once('ready', () => {
     console.log('Ready to listen!');
   });
 
   client.on('messageCreate', message => {
-    if (!message.content.startsWith(process.env.prefix) || message.author.bot) return;
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-    const args = message.content.slice(process.env.prefix.length).split(/ +/);
+    const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
     if (command === 'clear') {
