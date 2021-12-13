@@ -196,7 +196,7 @@ try {
       } else if (!nameZone || !numZone) {
         displayZoneListByBoss(message, nameBoss);
       } else { //sinon afficher setup
-        displaySetup(message, nameBoss, nameZone, numZone);
+        displaySetup(message, nameBoss, nameZone);
       }
     }
   });
@@ -222,7 +222,7 @@ try {
     message.channel.send(responseText);
   }
 
-  function displaySetup(message, nameBoss, nameZone, numZone) {
+  function displaySetup(message, nameBoss, nameZone) {
     var responseText = "";
     message.channel.send('Display Setup:');
     var setupFound = json.find(element => (element.name == nameBoss && element.zone.name == nameZone && element.zone.num == numZone));
