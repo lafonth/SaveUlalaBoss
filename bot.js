@@ -5,7 +5,7 @@ const {
 } = require('discord.js');
 
 const {
-  DBClient
+  Client: DBClient
 } = require('pg');
 
 const dbClient = new DBClient({
