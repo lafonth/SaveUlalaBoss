@@ -272,7 +272,7 @@ try {
 
   function isSkillListFilledUp(skillList) {
     return skillList.every((skill) => {
-      return (skillName !== "");
+      return (skill.skillname !== "");
     });
   }
 
