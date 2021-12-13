@@ -4,7 +4,9 @@ const {
   Intents
 } = require('discord.js');
 
-const { Client } = require('pg');
+const {
+  Client
+} = require('pg');
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
@@ -164,7 +166,7 @@ try {
       reset();
       message.channel.send('Setup saved!');
     } else if (command === 'check') {
-      displayCurrentSetup(message,json[nextPosition]);
+      displayCurrentSetup(message, json[nextPosition]);
     } else if (command === 'add') {
       addIsRuning = true;
       message.channel.send('Next Command : !b nameBoss nameZone');
@@ -233,18 +235,18 @@ try {
     var setupFound = json.find(element => (element.name == nameBoss && element.zone.name == nameZone && element.zone.num == numZone));
     responseText += setupFound.name + " " + setupFound.zone.name + " " + setupFound.zone.num + " \n";
     setupFound.playerList.forEach(player => {
-      responseText += "**Player "+ player.class + ": **";
-      player.skillList.forEach((skill,index) => {
-        if(index !== 3){
+      responseText += "**Player " + player.class + ": **";
+      player.skillList.forEach((skill, index) => {
+        if (index !== 3) {
           responseText += skill.name + " | ";
-        }else{
+        } else {
           responseText += skill.name;
         }
       });
       responseText += "\n";
       responseText += "Pet: " + player.pet;
       responseText += "\n";
-    }); 
+    });
     message.channel.send(responseText);
   }
 
@@ -253,18 +255,18 @@ try {
     message.channel.send('Display Current Setup:');
     responseText += setup.name + " " + setup.zone.name + " " + setup.zone.num + " \n";
     setup.playerList.forEach(player => {
-      responseText += "**Player "+ player.class + ": **";
-      player.skillList.forEach((skill,index) => {
-        if(index !== 3){
+      responseText += "**Player " + player.class + ": **";
+      player.skillList.forEach((skill, index) => {
+        if (index !== 3) {
           responseText += skill.name + " | ";
-        }else{
+        } else {
           responseText += skill.name;
         }
       });
       responseText += "\n";
       responseText += "Pet: " + player.pet;
       responseText += "\n";
-    }); 
+    });
     message.channel.send(responseText);
   }
 
@@ -290,12 +292,33 @@ try {
     // convert JSON object to string
     const data = JSON.stringify(setup);
 
-    // write JSON string to a file
-    fs.writeFile('data/storage.json', data, (err) => {
-      if (err) {
-        throw err;
+    //parse data to DB
+    //Skills
+    client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+      if (err) throw err;
+      for (let row of res.rows) {
+        console.log(JSON.stringify(row));
       }
-      console.log("JSON data is saved.");
+      client.end();
+    });
+    //Players
+
+    //Setup
+
+    // write JSON string to a file
+    // fs.writeFile('data/storage.json', data, (err) => {
+    //   if (err) {
+    //     throw err;
+    //   }
+    //   console.log("JSON data is saved.");
+    // });
+  }
+
+  function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
+    client.query('INSERT INTO Skill VALUES (1,' + skillName1 + ',' + toyName1 + '),(2,' + skillName2 + ',' + toyName2 + '),(3,' + skillName3 + ',' + toyName3 + '),(4,' + skillName4 + ',' + toyName4 + ')', (err, res) => {
+      if (err) throw err;
+      var keys = Object.keys(res);
+      client.end();
     });
   }
 
@@ -303,3 +326,4 @@ try {
   saveData(json);
   console.log(error);
 }
+
