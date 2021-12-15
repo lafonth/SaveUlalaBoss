@@ -183,7 +183,7 @@ try {
         json[nextPosition].playerList[numPlayer].class = args[1];
         json[nextPosition].playerList[numPlayer].pet = args[2];
         for (let index = 0; index < 4; index++) {
-          json[nextPosition].playerList[numPlayer].skillList[index].name = args[index + 3];
+          json[nextPosition].playerList[numPlayer].skillList[index].skillname = args[index + 3];
         }
         for (let index = 0; index < 4; index++) {
           json[nextPosition].playerList[numPlayer].skillList[index].toyName = args[index + 7];
@@ -278,7 +278,7 @@ try {
       console.log(skill.skillname);
     });
     return skillList.every((skill) => {
-      return (skill.skillname !== "");
+      return (skill.skillname !== "" && typeof skill.skillname !== undefined);
     });
   }
 
