@@ -160,14 +160,17 @@ try {
       reset();
       message.channel.send('Reset DONE!');
     } else if (command === 'save') {
-      saveData(json);
+      message.channel.send('Saving data...');
+      saveData(json).then(function () {
+        message.channel.send('Data SAVED!');
+      });
       reset();
       message.channel.send('Setup saved!');
     } else if (command === 'init') {
       // createDB();
       // message.channel.send('DB created');
     } else if (command === 'test') {
-      insertMultipleSkillsDB("s1", "t1", "s2", "t2", "s3", "t3", "s4", "t4");
+      // insertMultipleSkillsDB("s1", "t1", "s2", "t2", "s3", "t3", "s4", "t4");
     } else if (command === 'check') {
       displayCurrentSetup(message, json[nextPosition]);
     } else if (command === 'add') {
@@ -291,30 +294,32 @@ try {
     addIsRuning = false;
   }
 
-  function saveData(setup) {
+  async function saveData(setup) {
     setup.playerList.forEach(player => {
-      insertMultipleSkillsDB(
-          player.skillList[0].skillName,
-          player.skillList[0].toyName,
-          player.skillList[1].skillName,
-          player.skillList[1].toyName,
-          player.skillList[2].skillName,
-          player.skillList[2].toyName,
-          player.skillList[3].skillName,
-          player.skillList[3].toyName
-        )
-        .then(function(skills){
-            insertPlayer(player, skills);
-          }
-        );
+      if (player.class) {
+        await insertMultipleSkillsDB(
+            player.skillList[0].skillName,
+            player.skillList[0].toyName,
+            player.skillList[1].skillName,
+            player.skillList[1].toyName,
+            player.skillList[2].skillName,
+            player.skillList[2].toyName,
+            player.skillList[3].skillName,
+            player.skillList[3].toyName
+          )
+          .then(function (skills) {
+            await insertPlayer(player, skills);
+          });
+      }
     });
+    Promise.resolve();
   }
 
-  function insertSetup(setup, playersData) {
-    dbClient.query('INSERT INTO Setup VALUE ()', (err, res) => {
-      if (err) throw err;
-      return keys = Object.keys(res);
-    });
+  async function insertSetup(setup, playersData) {
+    // dbClient.query('INSERT INTO Setup VALUE ()', (err, res) => {
+    //   if (err) throw err;
+    //   return keys = Object.keys(res);
+    // });
   }
 
   async function insertPlayer(player, skills) {
