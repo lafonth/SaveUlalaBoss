@@ -190,7 +190,7 @@ try {
         }
         if (isPlayerListFilledUp(json[nextPosition].playerList)) {
           message.channel.send('Your setup is finshed!');
-          saveData(json);
+          // saveData(json);
         } else {
           message.channel.send('Next Command : !p numPlayer className petName skill1 skill2 skill3 skill4 toy1 toy2 toy3 toy4');
         }
@@ -383,6 +383,6 @@ try {
 
 
 } catch (error) {
-  saveData(json);
+  // saveData(json);
   console.log(error);
 }
