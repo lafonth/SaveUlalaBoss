@@ -328,7 +328,7 @@ try {
     // });
   }
 
-  function insertMultipleSkillsDB() {
+  function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
     var query = "INSERT INTO Skill (numorder, skillname, toyname) VALUES (1,$1,$2),(2,$3,$4),(3,$5,$6),(4,$7,$8)"
     var params = [skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4];
     dbClient.query(query, params, (err, res) => {
