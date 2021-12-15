@@ -1,2 +1,4 @@
+!clear
+!add
 !b b1 z1
 !p 1 assa lightning bush poison backstab reset marmot moblin tigre bear

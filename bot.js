@@ -276,6 +276,7 @@ try {
   function isSkillListFilledUp(skillList) {
     skillList.forEach(skill => {
       console.log(skill.skillname);
+      console.log(skill.skillname !== "" && typeof skill.skillname !== undefined);
     });
     return skillList.every((skill) => {
       return (skill.skillname !== "" && typeof skill.skillname !== undefined);
