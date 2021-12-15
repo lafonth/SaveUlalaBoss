@@ -274,6 +274,9 @@ try {
   }
 
   function isSkillListFilledUp(skillList) {
+    skillList.forEach(skill => {
+      console.log(skill.skillname);
+    });
     return skillList.every((skill) => {
       return (skill.skillname !== "");
     });
