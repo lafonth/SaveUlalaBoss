@@ -24,8 +24,6 @@ let json = require('./data/storage.json');
 
 try {
 
-  var nextPosition = json.length;
-
   var patternSetup = {
     bossName: "",
     zoneName: "",
@@ -132,7 +130,7 @@ try {
     ]
   };
 
-  json[nextPosition] = patternSetup;
+  json = patternSetup;
   var numPlayer = 0;
   var addIsRuning = 0;
 
@@ -172,26 +170,26 @@ try {
     } else if (command === 'test') {
       // insertMultipleSkillsDB("s1", "t1", "s2", "t2", "s3", "t3", "s4", "t4");
     } else if (command === 'check') {
-      displayCurrentSetup(message, json[nextPosition]);
+      displayCurrentSetup(message, json);
     } else if (command === 'add') {
       addIsRuning = true;
       message.channel.send('Next Command : !b nameBoss nameZone');
     } else if (addIsRuning == true) {
       if (command === 'b') {
-        json[nextPosition].boss = args[0];
-        json[nextPosition].zone = args[1];
+        json.boss = args[0];
+        json.zone = args[1];
         message.channel.send('Next Command : !p numPlayer className petName skill1 skill2 skill3 skill4 toy1 toy2 toy3 toy4');
       } else if (command === 'p') {
         numPlayer = parseInt(args[0]) - 1;
-        json[nextPosition].playerList[numPlayer].class = args[1];
-        json[nextPosition].playerList[numPlayer].pet = args[2];
+        json.playerList[numPlayer].class = args[1];
+        json.playerList[numPlayer].pet = args[2];
         for (let index = 0; index < 4; index++) {
-          json[nextPosition].playerList[numPlayer].skillList[index].skillName = args[index + 3];
+          json.playerList[numPlayer].skillList[index].skillName = args[index + 3];
         }
         for (let index = 0; index < 4; index++) {
-          json[nextPosition].playerList[numPlayer].skillList[index].toyName = args[index + 7];
+          json.playerList[numPlayer].skillList[index].toyName = args[index + 7];
         }
-        if (isPlayerListFilledUp(json[nextPosition].playerList)) {
+        if (isPlayerListFilledUp(json.playerList)) {
           message.channel.send('Your setup is finshed!');
           // saveData(json);
         } else {
@@ -238,9 +236,7 @@ try {
   function displaySetup(message, bossName, zoneName) {
     var responseText = "";
     message.channel.send('Display Setup:');
-    var setupFound = json.find(element => (element.bossName == bossName && element.zoneName == zoneName));
-    responseText += setupFound.name + " " + setupFound.zone.name + " \n";
-    setupFound.playerList.forEach(player => {
+    json.playerList.forEach(player => {
       responseText += "**Player " + player.class + ": **";
       player.skillList.forEach((skill, index) => {
         if (index !== 3) {
@@ -293,15 +289,15 @@ try {
   }
 
   function reset() {
-    json[nextPosition] = patternSetup;
+    json = patternSetup;
     numPlayer = 0;
     addIsRuning = false;
   }
 
   async function saveData(setup) {
-    console.log(setup.playerList);
-    for(var player in setup.playerList){
-      console.log(player.class);
+    console.log("saveData before loop: " + setup.playerList);
+    for(const player in setup.playerList){
+      console.log("saveData in loop: " + player.class);
       if (isExisting(player.class)) {
         await insertMultipleSkillsDB(
             player.skillList[0].skillName,
