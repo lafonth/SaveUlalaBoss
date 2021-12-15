@@ -1,5 +1,4 @@
 const fs = require('fs');
-const Promise = require('promise')
 const {
   Client,
   Intents
