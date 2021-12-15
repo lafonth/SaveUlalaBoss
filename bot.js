@@ -1,4 +1,5 @@
 const fs = require('fs');
+const Promise = require('promise')
 const {
   Client,
   Intents
@@ -274,10 +275,6 @@ try {
   }
 
   function isSkillListFilledUp(skillList) {
-    skillList.forEach(skill => {
-      console.log(skill.skillname);
-      console.log(skill.skillname !== "" && typeof skill.skillname !== 'undefined');
-    });
     return skillList.every((skill) => {
       return (skill.skillname !== "" && typeof skill.skillname !== 'undefined');
     });
@@ -307,8 +304,7 @@ try {
           player.skillList[3].skillName,
           player.skillList[3].toyName
         )
-        .then(
-          (skills) => {
+        .then(function(skills){
             insertPlayer(player, skills);
           }
         );
@@ -322,7 +318,7 @@ try {
     });
   }
 
-  function insertPlayer(player, skills) {
+  async function insertPlayer(player, skills) {
     skills.forEach(element => {
       console.log(element.skillid);
     });
@@ -332,7 +328,7 @@ try {
     // });
   }
 
-  function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
+  async function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
     var query = "INSERT INTO Skill (numorder, skillname, toyname) VALUES (1,$1,$2),(2,$3,$4),(3,$5,$6),(4,$7,$8)"
     var params = [skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4];
     dbClient.query(query, params, (err, res) => {
