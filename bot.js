@@ -276,7 +276,7 @@ try {
     message.channel.send(responseText);
   }
 
-  function isExisting(){
+  function isExisting(elem){
     return (elem !== "" && typeof elem !== 'undefined');
   }
 
