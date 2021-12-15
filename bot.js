@@ -167,7 +167,7 @@ try {
       // createDB();
       // message.channel.send('DB created');
     } else if (command === 'test') {
-      insertMultipleSkillsDB("s1", "t1","s2", "t2", "s3", "t3", "s4", "t4");
+      insertMultipleSkillsDB("s1", "t1", "s2", "t2", "s3", "t3", "s4", "t4");
     } else if (command === 'check') {
       displayCurrentSetup(message, json[nextPosition]);
     } else if (command === 'add') {
@@ -311,14 +311,14 @@ try {
     });
   }
 
-  function insertSetup(setup, playersData){
+  function insertSetup(setup, playersData) {
     dbClient.query('INSERT INTO Setup VALUE ()', (err, res) => {
       if (err) throw err;
       return keys = Object.keys(res);
     });
   }
 
-  function insertPlayer(player, skills){
+  function insertPlayer(player, skills) {
     skills.forEach(element => {
       console.log(element.skillid);
     });
@@ -328,8 +328,10 @@ try {
     // });
   }
 
-  function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
-    dbClient.query('INSERT INTO Skill (numorder, skillname, toyname) VALUES (1,' + skillName1 + ',' + toyName1 + '),(2,' + skillName2 + ',' + toyName2 + '),(3,' + skillName3 + ',' + toyName3 + '),(4,' + skillName4 + ',' + toyName4 + ')', (err, res) => {
+  function insertMultipleSkillsDB() {
+    var query = "INSERT INTO Skill (numorder, skillname, toyname) VALUES (1,$1,$2),(2,$3,$4),(3,$5,$6),(4,$7,$8)"
+    var params = [skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4];
+    dbClient.query(query, params, (err, res) => {
       if (err) throw err;
       return keys = Object.keys(res);
     });
