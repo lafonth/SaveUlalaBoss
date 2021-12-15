@@ -295,7 +295,8 @@ try {
   }
 
   async function saveData(setup) {
-    setup.playerList.forEach(player => {
+    for(var player in setup.playerList){
+      console.log(player.class);
       if (player.class) {
         await insertMultipleSkillsDB(
             player.skillList[0].skillName,
@@ -311,7 +312,7 @@ try {
             await insertPlayer(player, skills);
           });
       }
-    });
+    }
     Promise.resolve();
   }
 
@@ -323,9 +324,9 @@ try {
   }
 
   async function insertPlayer(player, skills) {
-    skills.forEach(element => {
+    for(element of skills){
       console.log(element.skillid);
-    });
+    }
     // dbClient.query('INSERT INTO Player VALUE ()', (err, res) => {
     //   if (err) throw err;
     //   return keys = Object.keys(res);
