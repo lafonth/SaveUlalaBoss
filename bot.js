@@ -309,7 +309,7 @@ try {
             player.skillList[3].toyName
           )
           .then(function (skills) {
-            await insertPlayer(player, skills);
+            insertPlayer(player, skills);
           });
       }
     }
