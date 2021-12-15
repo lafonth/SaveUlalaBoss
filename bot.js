@@ -166,6 +166,8 @@ try {
     } else if (command === 'init') {
       // createDB();
       // message.channel.send('DB created');
+    } else if (command === 'test') {
+      insertMultipleSkillsDB("s1", "t1","s2", "t2", "s3", "t3", "s4", "t4");
     } else if (command === 'check') {
       displayCurrentSetup(message, json[nextPosition]);
     } else if (command === 'add') {
@@ -309,8 +311,21 @@ try {
     });
   }
 
-  function insertPlayer(player, skills){
+  function insertSetup(setup, playersData){
+    dbClient.query('INSERT INTO Setup VALUE ()', (err, res) => {
+      if (err) throw err;
+      return keys = Object.keys(res);
+    });
+  }
 
+  function insertPlayer(player, skills){
+    skills.forEach(element => {
+      console.log(element.skillid);
+    });
+    // dbClient.query('INSERT INTO Player VALUE ()', (err, res) => {
+    //   if (err) throw err;
+    //   return keys = Object.keys(res);
+    // });
   }
 
   function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
