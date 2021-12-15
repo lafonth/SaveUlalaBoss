@@ -276,9 +276,13 @@ try {
     message.channel.send(responseText);
   }
 
+  function isExisting(){
+    return (elem !== "" && typeof elem !== 'undefined');
+  }
+
   function isSkillListFilledUp(skillList) {
     return skillList.every((skill) => {
-      return (skill.skillName !== "" && typeof skill.skillName !== 'undefined');
+      return isExisting(skill.skillName);
     });
   }
 
@@ -295,9 +299,10 @@ try {
   }
 
   async function saveData(setup) {
+    console.log(setup.playerList);
     for(var player in setup.playerList){
       console.log(player.class);
-      if (player.class) {
+      if (isExisting(player.class)) {
         await insertMultipleSkillsDB(
             player.skillList[0].skillName,
             player.skillList[0].toyName,
@@ -336,8 +341,10 @@ try {
   async function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
     var query = "INSERT INTO Skill (numorder, skillName, toyname) VALUES (1,$1,$2),(2,$3,$4),(3,$5,$6),(4,$7,$8)"
     var params = [skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4];
+    console.log("Before query");
     dbClient.query(query, params, (err, res) => {
       if (err) throw err;
+      console.log("after query" +res);
       return keys = Object.keys(res);
     });
   }
