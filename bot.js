@@ -183,7 +183,7 @@ try {
         json[nextPosition].playerList[numPlayer].class = args[1];
         json[nextPosition].playerList[numPlayer].pet = args[2];
         for (let index = 0; index < 4; index++) {
-          json[nextPosition].playerList[numPlayer].skillList[index].skillname = args[index + 3];
+          json[nextPosition].playerList[numPlayer].skillList[index].skillName = args[index + 3];
         }
         for (let index = 0; index < 4; index++) {
           json[nextPosition].playerList[numPlayer].skillList[index].toyName = args[index + 7];
@@ -275,7 +275,7 @@ try {
 
   function isSkillListFilledUp(skillList) {
     return skillList.every((skill) => {
-      return (skill.skillname !== "" && typeof skill.skillname !== 'undefined');
+      return (skill.skillName !== "" && typeof skill.skillName !== 'undefined');
     });
   }
 
@@ -328,7 +328,7 @@ try {
   }
 
   async function insertMultipleSkillsDB(skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4) {
-    var query = "INSERT INTO Skill (numorder, skillname, toyname) VALUES (1,$1,$2),(2,$3,$4),(3,$5,$6),(4,$7,$8)"
+    var query = "INSERT INTO Skill (numorder, skillName, toyname) VALUES (1,$1,$2),(2,$3,$4),(3,$5,$6),(4,$7,$8)"
     var params = [skillName1, toyName1, skillName2, toyName2, skillName3, toyName3, skillName4, toyName4];
     dbClient.query(query, params, (err, res) => {
       if (err) throw err;
